@@ -15,6 +15,7 @@ int main()
 			vm.exitSystem();
 			break;
 		case 1: //添加职工
+			vm.Add_Arry();
 			break;
 		case 2: //显示职工
 			break;
