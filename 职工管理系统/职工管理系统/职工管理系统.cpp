@@ -18,10 +18,13 @@ int main()
 			vm.Add_Arry();
 			break;
 		case 2: //显示职工
+			vm.Show_Arry();
 			break;
 		case 3: //删除职工
+			vm.Del_Arry();
 			break;
 		case 4: //修改职工
+			vm.Mod_Arry();
 			break;
 		case 5: //查找职工
 			break;
