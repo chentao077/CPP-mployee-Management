@@ -53,6 +53,15 @@ public:
 	//保存函数
 	void Save();
 
+	//查找员工
+	void Find_Arry();
+
+	//排序员工
+	void Sort_Arry();
+
+	//清空通讯录
+	void Clean_Arry();
+
 	~WorkManager();
 
 };

@@ -27,10 +27,13 @@ int main()
 			vm.Mod_Arry();
 			break;
 		case 5: //查找职工
+			vm.Find_Arry();
 			break;
 		case 6: //排序职工
+			vm.Sort_Arry();
 			break;
 		case 7: //清空文件
+			vm.Clean_Arry();
 			break;
 		default:
 			system("cls");

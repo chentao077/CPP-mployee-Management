@@ -108,8 +108,22 @@ void  WorkManager::Add_Arry()
 			int id;
 			string name;
 			int select;
-			cout << "请输入第" <<i+1<<"个员工的id" << endl;
-			cin >> id;
+			bool flag = true;  //是否重复标志
+			while (flag)
+			{
+				cout << "请输入第" << i + 1 << "个员工的id" << endl;
+				cin >> id;
+				int ret = IsExist(id);
+				if (ret == -1)
+				{
+					flag = false;
+					break;
+				}
+				else
+				{
+					cout << "该员工号已经存在，请重新输入！" << endl;
+				}
+			}
 			cout << "请输入第" << i + 1 << "个员工的姓名" << endl;
 			cin >> name;
 			cout << "请输入第" << i + 1 << "个员工的职位" << endl;
@@ -237,7 +251,7 @@ int WorkManager::IsExist(int id)
 	int index = -1;
 	for (int i = 0; i < this->m_Num; i++)
 	{
-		if (index == this->m_Arry[i]->m_Id)
+		if (id == this->m_Arry[i]->m_Id)
 		{
 			index = i;
 			break;
@@ -302,8 +316,22 @@ void WorkManager::Mod_Arry()
 			int id;
 			string name;
 			int select;
-			cout << "查到： " << index << "号职工，请输入新职工号： " << endl;
-			cin >> id;
+			bool flag = true;  //是否重复标志
+			while (flag)
+			{
+				cout << "查到： " << index << "号职工，请输入新职工号： " << endl;
+				cin >> id;
+				int ret = IsExist(id);
+				if (ret == -1)
+				{
+					flag = false;
+					break;
+				}
+				else
+				{
+					cout << "该员工号已经存在，请重新输入！" << endl;
+				}
+			}
 			cout << "请输入新姓名" << endl;
 			cin >> name;
 			cout << "请输入新职位" << endl;
@@ -332,6 +360,152 @@ void WorkManager::Mod_Arry()
 			this->m_Arry[index] = work;
 			cout << "修改成功！" << endl;
 		}
+	}
+	system("pause");
+	system("cls");
+}
+
+//查找员工
+void WorkManager::Find_Arry()
+{
+	if (this->m_isEmpty == -1)
+	{
+		cout << "文件不存在或记录为空" << endl;
+	}
+	else
+	{
+		cout << "请选择要查找的方式：" << endl;
+		cout << "1、按员工号查询" << endl;
+		cout << "2、按姓名查询" << endl;
+		int input;
+		cin >> input;
+		if (input == 1)//按职工号查找
+		{
+			int id;
+			cout << "请输入要查询的员工号：" << endl;
+			cin >> id;
+			int ret = IsExist(id);
+			if (ret != -1)
+			{
+				cout << "查找成功！该职工信息如下：" << endl;
+				this->m_Arry[ret]->ShowInfo();
+			}
+			else
+			{
+				cout << "查无此人！" << endl;
+			}
+		}
+		else if (input == 2)//按姓名查找
+		{
+			string name;
+			bool flag = false;  //查找到的标志
+			cout << "请输入要查询的姓名：" << endl;
+			cin >> name;
+			for (int i = 0; i < this->m_Num; i++)
+			{
+				if (this->m_Arry[i]->m_Name == name)
+				{
+					cout << "查找成功！该职工信息如下：" << endl;
+					this->m_Arry[i]->ShowInfo();
+					flag = true;
+				}
+
+			}
+			if (flag = false)
+			{
+				cout << "查无此人！" << endl;
+			}
+		}
+		else
+		{
+			cout << "输入有误！" << endl;
+		}
+	}
+	system("pause");
+	system("cls");
+}
+
+//排序员工
+void WorkManager::Sort_Arry()
+{
+	if (this->m_isEmpty == -1)
+	{
+		cout << "文件不存在或记录为空" << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		cout << "请选择排序方式： " << endl;
+		cout << "1、按职工号进行升序" << endl;
+		cout << "2、按职工号进行降序" << endl;
+
+		int input;
+		cin >> input;
+		for (int i = 0; i < this->m_Num; i++)
+		{
+			int minOrmax = i;
+			for (int j = i+1; j < this->m_Num; j++)
+			{
+				//升序
+				if (input == 1)
+				{
+					if (this->m_Arry[minOrmax]->m_Id > this->m_Arry[j]->m_Id)
+					{
+						minOrmax = j;
+					}
+				}
+				//降序
+				else
+				{
+					if (this->m_Arry[minOrmax]->m_Id < this->m_Arry[j]->m_Id)
+					{
+						minOrmax = j;
+					}
+				}
+			}
+			if (minOrmax != i)
+			{
+				Work* tmp = this->m_Arry[i];
+				this->m_Arry[i] = this->m_Arry[minOrmax];
+				this->m_Arry[minOrmax] = tmp;
+			}
+		}
+		cout << "排序成功！" << endl;
+		this->Save();
+		this->Show_Arry();	
+	}
+}
+
+//清空通讯录
+void WorkManager::Clean_Arry()
+{
+	cout << "确认清空？" << endl;
+	cout << "1、确认" << endl;
+	cout << "2、返回" << endl;
+
+	int input;
+	cin >> input;
+	if (input == 1)
+	{
+		//打开模式 ios::trunc 如果存在删除文件并重新创建
+		ofstream ofs("text.txt", ios::trunc);
+		ofs.close();
+		if (this->m_Arry != NULL)
+		{
+			for (int i = 0; i < this->m_Num; i++)
+			{
+				if (m_Arry[i] != NULL)
+				{
+					delete m_Arry[i];
+				}
+			}
+			m_Num = 0;
+			delete[] m_Arry;
+			m_Arry = NULL;
+			this->m_isEmpty = -1;
+		}
+		cout << "清空成功！" << endl;
 	}
 	system("pause");
 	system("cls");
